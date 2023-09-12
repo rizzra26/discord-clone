@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
-import { ActionTooltip } from "../action-tooltip";
+import { ActionTooltip } from "@/components/action-tooltip";
 
 interface NavigationItemProps {
   id: string;
@@ -13,11 +13,9 @@ interface NavigationItemProps {
 }
 
 export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
-  // Hooks
   const params = useParams();
   const router = useRouter();
 
-  // Methods
   const onClick = () => {
     router.push(`/servers/${id}`);
   };
@@ -31,16 +29,15 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
             params?.serverId !== id && "group-hover:h-[20px]",
             params?.serverId === id ? "h-[36px]" : "h-[8px]"
           )}
+        />
+        <div
+          className={cn(
+            "relative group flex mx-3 h-[48px] w-[48px] rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden",
+            params?.serverId === id &&
+              "bg-primary/10 text-primary rounded-[16px]"
+          )}
         >
-          <div
-            className={cn(
-              "relative group flex mx-3 h-[48px] w-[48px] rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden",
-              params?.serverId === id &&
-                "bg-primary/10 text-primary rounded-[16px]"
-            )}
-          >
-            <Image fill src={imageUrl} alt="Server" />
-          </div>
+          <Image fill src={imageUrl} alt="Channel" />
         </div>
       </button>
     </ActionTooltip>
