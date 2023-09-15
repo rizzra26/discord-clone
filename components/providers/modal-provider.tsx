@@ -10,6 +10,7 @@ import { MembersModal } from "@/components/modals/members-modal";
 import { CreateChannelModal } from "@/components/modals/create-channel-modal";
 import { LeaveServerModal } from "@/components/modals/leave-server-modal";
 import { DeleteServerModal } from "@/components/modals/delete-server-modal";
+import { EditChannelModal } from "../modals/edit-channel";
 
 export const ModalProvider = () => {
   // States
@@ -30,6 +31,7 @@ export const ModalProvider = () => {
       <CreateChannelModal />
       <LeaveServerModal />
       <DeleteServerModal />
+      <EditChannelModal />
     </>
   );
 };
