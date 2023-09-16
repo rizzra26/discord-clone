@@ -12,6 +12,8 @@ import { LeaveServerModal } from "@/components/modals/leave-server-modal";
 import { DeleteServerModal } from "@/components/modals/delete-server-modal";
 import { EditChannelModal } from "../modals/edit-channel";
 import { DeleteChannelModal } from "../modals/delete-channel-modal";
+import { MessageFileModal } from "../modals/message-file-modal";
+import { DeleteMessageModal } from "../modals/delete-message-modal";
 
 export const ModalProvider = () => {
   // States
@@ -34,6 +36,8 @@ export const ModalProvider = () => {
       <DeleteServerModal />
       <EditChannelModal />
       <DeleteChannelModal />
+      <MessageFileModal />
+      <DeleteMessageModal />
     </>
   );
 };

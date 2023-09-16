@@ -9,7 +9,7 @@ export const MobileToggle = ({ serverId }: { serverId: string }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden mr-2">
           <Menu />
         </Button>
       </SheetTrigger>
