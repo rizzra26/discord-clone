@@ -6,7 +6,7 @@ import axios from "axios";
 import qs from "query-string";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Plus } from "lucide-react";
+import { Plus, SendHorizonal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { EmojiPicker } from "@/components/emoji-picker";
 import { useModal } from "@/hooks/use-modal-store";
@@ -40,6 +40,7 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
         query,
       });
 
+      form.reset();
       await axios.post(url, values);
     } catch (error) {
       console.log(error);
@@ -70,12 +71,17 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                     }`}
                     {...field}
                   />
-                  <div className="absolute top-7 right-8">
+                  <div className="absolute top-7 right-8 flex">
                     <EmojiPicker
                       onChange={(emoji: string) =>
                         field.onChange(`${field.value} ${emoji}`)
                       }
                     />
+                    {!!form.getValues("content").length && (
+                      <button type="submit" className="ml-3">
+                        <SendHorizonal className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </FormControl>
