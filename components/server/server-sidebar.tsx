@@ -1,6 +1,5 @@
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { redirectToSignIn } from "@clerk/nextjs";
 import { ChannelType, MemberRole } from "@prisma/client";
 import { redirect } from "next/navigation";
 import { ServerHeader } from "@/components/server/server-header";
@@ -33,7 +32,7 @@ const roleIconMap = {
 export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   const profile = await currentProfile();
 
-  if (!profile) redirectToSignIn();
+  if (!profile) redirect("/sign-in");
 
   const server = await db.server.findUnique({
     where: {

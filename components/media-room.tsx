@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LiveKitRoom, VideoConference } from "@livekit/components-react";
+import {
+  ControlBar,
+  GridLayout,
+  ParticipantTile,
+  RoomAudioRenderer,
+  useTracks,
+  RoomContext,
+} from "@livekit/components-react";
+import { Room, Track } from "livekit-client";
 import "@livekit/components-styles";
-import { Channel } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
 
@@ -16,8 +23,18 @@ interface MediaRoomProps {
 export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
   const { user } = useUser();
   const [token, setToken] = useState("");
+  const [roomInstance] = useState(
+    () =>
+      new Room({
+        // Optimize video quality for each participant's screen
+        adaptiveStream: true,
+        // Enable automatic audio/video quality optimization
+        dynacast: true,
+      })
+  );
 
   useEffect(() => {
+    let mounted = true;
     if (!user?.firstName || !user?.lastName) return;
 
     const name = `${user.firstName} ${user.lastName}`;
@@ -28,12 +45,21 @@ export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
           `/api/livekit?room=${chatId}&username=${name}`
         );
         const data = await resp.json();
-        setToken(data.token);
+        if (!mounted) return;
+        if (data.token) {
+          setToken(data.token);
+          await roomInstance.connect(process.env.LIVEKIT_URL, data.token);
+        }
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [user?.firstName, user?.lastName, chatId]);
+
+    return () => {
+      mounted = false;
+      roomInstance.disconnect();
+    };
+  }, [roomInstance, user?.firstName, user?.lastName, chatId]);
 
   if (token === "") {
     return (
@@ -45,15 +71,37 @@ export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
   }
 
   return (
-    <LiveKitRoom
-      data-lk-theme="default"
-      serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-      token={token}
-      connect={true}
-      video={video}
-      audio={audio}
-    >
-      <VideoConference />
-    </LiveKitRoom>
+    <RoomContext.Provider value={roomInstance}>
+      <div data-lk-theme="default" style={{ height: "100dvh" }}>
+        {/* Your custom component with basic video conferencing functionality. */}
+        <MyVideoConference />
+        {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
+        <RoomAudioRenderer />
+        {/* Controls for the user to start/stop audio, video, and screen share tracks */}
+        <ControlBar />
+      </div>
+    </RoomContext.Provider>
   );
 };
+
+function MyVideoConference() {
+  // `useTracks` returns all camera and screen share tracks. If a user
+  // joins without a published camera track, a placeholder track is returned.
+  const tracks = useTracks(
+    [
+      { source: Track.Source.Camera, withPlaceholder: true },
+      { source: Track.Source.ScreenShare, withPlaceholder: false },
+    ],
+    { onlySubscribed: false }
+  );
+  return (
+    <GridLayout
+      tracks={tracks}
+      style={{ height: "calc(100vh - var(--lk-control-bar-height))" }}
+    >
+      {/* The GridLayout accepts zero or one child. The child is used
+      as a template to render all passed in tracks. */}
+      <ParticipantTile />
+    </GridLayout>
+  );
+}

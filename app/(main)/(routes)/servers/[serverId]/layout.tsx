@@ -1,7 +1,6 @@
 import { ServerSidebar } from "@/components/server/server-sidebar";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 const ServerIdLayout = async ({
@@ -13,7 +12,7 @@ const ServerIdLayout = async ({
 }) => {
   const profile = await currentProfile();
 
-  if (!profile) return redirectToSignIn();
+  if (!profile) return redirect("/sign-in");
 
   const server = await db.server.findUnique({
     where: {
@@ -30,7 +29,7 @@ const ServerIdLayout = async ({
 
   return (
     <div className="h-full">
-      <div className="hidden md:flex h-full w-60 z-20 flex-col fixed inset-y-0">
+      <div className="max-md:hidden md:flex h-full w-60 z-20 flex-col fixed inset-y-0">
         <ServerSidebar serverId={params.serverId} />
       </div>
       <main className="h-full md:pl-60">{children}</main>

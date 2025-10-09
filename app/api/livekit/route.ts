@@ -1,6 +1,8 @@
 import { AccessToken } from "livekit-server-sdk";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 0;
+
 export async function GET(req: NextRequest) {
   const room = req.nextUrl.searchParams.get("room");
   const username = req.nextUrl.searchParams.get("username");
@@ -18,7 +20,7 @@ export async function GET(req: NextRequest) {
 
   const apiKey = process.env.LIVEKIT_API_KEY;
   const apiSecret = process.env.LIVEKIT_API_SECRET;
-  const wsUrl = process.env.NEXT_PUBLIC_LIVEKIT_URL;
+  const wsUrl = process.env.LIVEKIT_URL;
 
   if (!apiKey || !apiSecret || !wsUrl) {
     return NextResponse.json(
@@ -31,5 +33,8 @@ export async function GET(req: NextRequest) {
 
   at.addGrant({ room, roomJoin: true, canPublish: true, canSubscribe: true });
 
-  return NextResponse.json({ token: at.toJwt() });
+  return NextResponse.json(
+    { token: await at.toJwt() },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
