@@ -14,6 +14,8 @@
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
     "@hookform/resolvers": "^3.3.1",
+    "@livekit/components-react": "^2.9.15",
+    "@livekit/components-styles": "^1.1.6",
     "@prisma/client": "^6.16.2",
     "@radix-ui/react-avatar": "^1.0.3",
     "@radix-ui/react-dialog": "^1.0.4",
@@ -39,7 +41,7 @@
     "emoji-mart": "^5.5.2",
     "eslint": "8.49.0",
     "eslint-config-next": "^15.5.4",
-    "livekit-client": "^1.13.3",
+    "livekit-client": "^2.15.8",
     "livekit-server-sdk": "^2.14.0",
     "lucide-react": "^0.276.0",
     "next": "^14.1.0",
@@ -62,8 +64,6 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@livekit/components-react": "^2.9.15",
-    "@livekit/components-styles": "^1.1.6",
     "@types/uuid": "^9.0.3",
     "prisma": "^6.16.2"
   }

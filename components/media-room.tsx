@@ -48,10 +48,10 @@ export const MediaRoom = ({ chatId, video, audio }: MediaRoomProps) => {
         if (!mounted) return;
         if (data.token) {
           setToken(data.token);
-          await roomInstance.connect(process.env.LIVEKIT_URL, data.token);
+          await roomInstance.connect(process.env.LIVEKIT_URL!, data.token);
         }
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     })();
 
