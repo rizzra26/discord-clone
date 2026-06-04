@@ -41,7 +41,7 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
 
   const conversation = await getOrCreateConversation(
     currentMember.id,
-    params.memberId
+    params.memberId,
   );
 
   if (!conversation) {
@@ -62,7 +62,12 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
         type="conversation"
       />
       {searchParams.video && (
-        <MediaRoom chatId={conversation.id} video={true} audio={true} />
+        <MediaRoom
+          chatId={conversation.id}
+          video={true}
+          audio={true}
+          channelName={otherMember.profile.name}
+        />
       )}
       {!searchParams.video && (
         <>
