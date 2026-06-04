@@ -28,6 +28,8 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
     },
   });
 
+  console.log("INI CHANNELTYPE NYA : ", channel.type);
+
   const member = await db.member.findFirst({
     where: {
       serverId: params.serverId,
@@ -74,10 +76,20 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
         </>
       )}
       {channel.type === ChannelType.VOICE && (
-        <MediaRoom chatId={channel.id} video={false} audio={true} />
+        <MediaRoom
+          chatId={channel.id}
+          video={false}
+          audio={true}
+          channelName={channel.name}
+        />
       )}
       {channel.type === ChannelType.VIDEO && (
-        <MediaRoom chatId={channel.id} video={true} audio={true} />
+        <MediaRoom
+          chatId={channel.id}
+          video={true}
+          audio={true}
+          channelName={channel.name}
+        />
       )}
     </div>
   );
