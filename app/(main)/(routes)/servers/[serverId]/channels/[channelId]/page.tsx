@@ -28,8 +28,6 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
     },
   });
 
-  console.log("INI CHANNELTYPE NYA : ", channel.type);
-
   const member = await db.member.findFirst({
     where: {
       serverId: params.serverId,
